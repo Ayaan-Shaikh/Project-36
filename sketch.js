@@ -17,8 +17,15 @@ function setup() {
   database=firebase.database();
 	createCanvas(950, 500);
 
-    foodObj=new Food;
+    foodObj=new Food();
   
+    foodStock=database.ref('Food');
+    foodStock.on("value",readStock);
+
+    fedTime=database.ref('FeedTime');
+ fedTime.on("value",function(data){
+    lastFed=data.val();
+  });  
  
   dog=createSprite(750,320,20,20);
   dog.addImage(dogImg);
@@ -40,10 +47,7 @@ function setup() {
 function draw() {  
  background(46, 139, 87);
 
- fedTime=database.ref('FeedTime');
- fedTime.on("value",function(data){
-    lastFed=data.val();
-  });  
+ 
   
  fill(255,255,254);
  textSize(15);
@@ -57,7 +61,7 @@ function draw() {
 
   }
  
-
+  
   drawSprites();
   foodObj.display();
  }
@@ -71,6 +75,7 @@ foodObj.updateFoodStock(foodS);
 
 }
 
+
 function feedDog(){
 dog.addImage(happyDog);
 foodObj.updateFoodStock(foodObj.getFoodStock()-1);
@@ -80,7 +85,7 @@ FeedTime:hour()
 })
 }
 
-
+  
 
 
 
@@ -91,3 +96,8 @@ function addFoods(){
   })
   }
 
+    
+    
+    
+     
+      
